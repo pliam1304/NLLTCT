@@ -1,0 +1,5 @@
+﻿  program.cpp
+D:\cplusplus\BaiTapLab5\Lab5_Bai1_MangMotChieu\Lab05_Bai02_Dem\menu.h(99,11): warning C4129: 'D': unrecognized character escape sequence
+  (compiling source file 'program.cpp')
+  
+  Lab05_Bai02_Dem.vcxproj -> D:\cplusplus\BaiTapLab5\Lab5_Bai1_MangMotChieu\x64\Debug\Bai02_Dem.exe
