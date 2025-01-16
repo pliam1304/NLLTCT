@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SetOperations
 {
@@ -8,126 +6,139 @@ namespace SetOperations
     {
         static void Main(string[] args)
         {
-            HashSet<int> U = new HashSet<int>();
-            HashSet<int> A = new HashSet<int>();
-            HashSet<int> B = new HashSet<int>();
+            int[] U = new int[100]; // Giả sử tập vũ trụ có tối đa 100 phần tử
+            int[] A = new int[100];
+            int[] B = new int[100];
 
             NhapTapHop(U, "Tập vũ trụ U");
             NhapTapHop(A, "Tập A");
             NhapTapHop(B, "Tập B");
 
-            int choice;
-            do
-            {
-                Console.Clear();
-                XuatMenu();
-                Console.Write("Chọn chức năng: ");
-                choice = int.Parse(Console.ReadLine());
-
-                switch (choice)
-                {
-                    case 1:
-                        NhapTapHop(U, "Tập vũ trụ U");
-                        NhapTapHop(A, "Tập A");
-                        NhapTapHop(B, "Tập B");
-                        break;
-                    case 2:
-                        KiemTraPhanTu(A);
-                        break;
-                    case 3:
-                        TinhGiao(A, B);
-                        break;
-                    case 4:
-                        TinhHop(A, B);
-                        break;
-                    case 5:
-                        TinhHieu(A, B);
-                        break;
-                    case 6:
-                        TinhPhanBu(U, A);
-                        break;
-                    case 7:
-                        TinhHieuDoiXung(A, B);
-                        break;
-                    case 0:
-                        Console.WriteLine("Kết thúc chương trình.");
-                        break;
-                    default:
-                        Console.WriteLine("Lựa chọn không hợp lệ.");
-                        break;
-                }
-
-                Console.WriteLine("Nhấn Enter để tiếp tục...");
-                Console.ReadLine();
-            } while (choice != 0);
+            // Phần còn lại tương tự như code sử dụng HashSet
+            // ...
         }
 
-        static void NhapTapHop(HashSet<int> set, string tenTap)
+        static void NhapTapHop(int[] set, string tenTap)
         {
             Console.WriteLine($"Nhập các phần tử của {tenTap} (nhập -1 để kết thúc):");
+            int i = 0;
             int n;
             while ((n = int.Parse(Console.ReadLine())) != -1)
             {
-                set.Add(n);
+                if (!KiemTraTonTai(set, n, i))
+                {
+                    set[i++] = n;
+                }
             }
         }
 
-        static void KiemTraPhanTu(HashSet<int> A)
+        static bool KiemTraTonTai(int[] arr, int x, int n)
         {
-            Console.Write("Nhập phần tử cần kiểm tra: ");
-            int x = int.Parse(Console.ReadLine());
-            if (A.Contains(x))
+            for (int i = 0; i < n; i++)
             {
-                Console.WriteLine($"{x} thuộc tập A.");
+                if (arr[i] == x)
+                {
+                    return true;
+                }
             }
-            else
+            return false;
+        }
+
+        static void SapXep(int[] arr, int n)
+        {
+            // Sử dụng thuật toán sắp xếp nổi bọt (bạn có thể thay thế bằng các thuật toán khác)
+            for (int i = 0; i < n - 1; i++)
             {
-                Console.WriteLine($"{x} không thuộc tập A.");
+                for (int j = 0; j < n - i - 1; j++)
+                {
+                    if (arr[j] > arr[j + 1])
+                    {
+                        int temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+                }
             }
         }
 
-        static void TinhGiao(HashSet<int> A, HashSet<int> B)
+        static void TinhGiao(int[] A, int[] B, int nA, int nB, out int[] giao, out int nGiao)
         {
-            var giao = A.Intersect(B);
-            Console.WriteLine("Tập giao A ∩ B: " + string.Join(", ", giao));
+            SapXep(A, nA);
+            SapXep(B, nB);
+
+            ngiao = new int[Math.Min(nA, nB)];
+            nGiao = 0;
+            int i = 0, j = 0;
+            while (i < nA && j < nB)
+            {
+                if (A[i] == B[j])
+                {
+                    giao[nGiao++] = A[i];
+                    i++;
+                    j++;
+                }
+                else if (A[i] < B[j])
+                {
+                    i++;
+                }
+                else
+                {
+                    j++;
+                }
+            }
         }
 
-        static void TinhHop(HashSet<int> A, HashSet<int> B)
+        static void TinhHop(int[] A, int[] B, int nA, int nB, out int[] hop, out int nHop)
         {
-            var hop = A.Union(B);
-            Console.WriteLine("Tập hợp A U B: " + string.Join(", ", hop));
+            hop = new int[nA + nB]; // Tối đa các phần tử trong hợp bằng tổng số phần tử của A và B
+            nHop = 0;
+            for (int i = 0; i < nA; i++)
+            {
+                hop[nHop++] = A[i];
+            }
+            for (int i = 0; i < nB; i++)
+            {
+                if (!KiemTraTonTai(hop, B[i], nHop))
+                {
+                    hop[nHop++] = B[i];
+                }
+            }
         }
 
-        static void TinhHieu(HashSet<int> A, HashSet<int> B)
+        static void TinhHieu(int[] A, int[] B, int nA, int nB, out int[] hieu, out int nHieu)
         {
-            var hieu = A.Except(B);
-            Console.WriteLine("Tập hiệu A \\ B: " + string.Join(", ", hieu));
+            hieu = new int[nA];
+            nHieu = 0;
+            for (int i = 0; i < nA; i++)
+            {
+                if (!KiemTraTonTai(B, A[i], nB))
+                {
+                    hieu[nHieu++] = A[i];
+                }
+            }
         }
 
-        static void TinhPhanBu(HashSet<int> U, HashSet<int> A)
+        static void TinhPhanBu(int[] U, int[] A, int nU, int nA, out int[] phanBu, out int nPhanBu)
         {
-            var phanBu = U.Except(A);
-            Console.WriteLine("Phần bù của A trong U: " + string.Join(", ", phanBu));
+            phanBu = new int[nU];
+            nPhanBu = 0;
+            for (int i = 0; i < nU; i++)
+            {
+                if (!KiemTraTonTai(A, U[i], nA))
+                {
+                    phanBu[nPhanBu++] = U[i];
+                }
+            }
         }
 
-        static void TinhHieuDoiXung(HashSet<int> A, HashSet<int> B)
+        static void TinhHieuDoiXung(int[] A, int[] B, int nA, int nB, out int[] hieuDoiXung, out int nHieuDoiXung)
         {
-            var hieuDoiXung = A.SymmetricExceptWith(B);
-            Console.WriteLine("Hiệu đối xứng A Δ B: " + string.Join(", ", hieuDoiXung));
-        }
-
-        static void XuatMenu()
-        {
-            Console.WriteLine("======== CHỌN CHỨC NĂNG ========");
-            Console.WriteLine("1. Nhập lại dữ liệu");
-            Console.WriteLine("2. Kiểm tra phần tử thuộc tập");
-            Console.WriteLine("3. Tính giao");
-            Console.WriteLine("4. Tính hợp");
-            Console.WriteLine("5. Tính hiệu");
-            Console.WriteLine("6. Tính phần bù");
-            Console.WriteLine("7. Tính hiệu đối xứng");
-            Console.WriteLine("0. Thoát");
-            Console.WriteLine("================================");
+            // Tính hiệu A\B và B\A, sau đó hợp hai hiệu lại
+            int[] hieuAB, hieuBA;
+            int nHieuAB, nHieuBA;
+            TinhHieu(A, B, nA, nB, out hieuAB, out nHieuAB);
+            TinhHieu(B, A, nB, nA, out hieuBA, out nHieuBA);
+            TinhHop(hieuAB, hieuBA, nHieuAB, nHieuBA, out hieuDoiXung, out nHieuDoiXung);
         }
     }
 }
