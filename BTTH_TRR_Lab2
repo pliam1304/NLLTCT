@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SetOperations
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            HashSet<int> U = new HashSet<int>();
+            HashSet<int> A = new HashSet<int>();
+            HashSet<int> B = new HashSet<int>();
+
+            NhapTapHop(U, "Tập vũ trụ U");
+            NhapTapHop(A, "Tập A");
+            NhapTapHop(B, "Tập B");
+
+            int choice;
+            do
+            {
+                Console.Clear();
+                XuatMenu();
+                Console.Write("Chọn chức năng: ");
+                choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        NhapTapHop(U, "Tập vũ trụ U");
+                        NhapTapHop(A, "Tập A");
+                        NhapTapHop(B, "Tập B");
+                        break;
+                    case 2:
+                        KiemTraPhanTu(A);
+                        break;
+                    case 3:
+                        TinhGiao(A, B);
+                        break;
+                    case 4:
+                        TinhHop(A, B);
+                        break;
+                    case 5:
+                        TinhHieu(A, B);
+                        break;
+                    case 6:
+                        TinhPhanBu(U, A);
+                        break;
+                    case 7:
+                        TinhHieuDoiXung(A, B);
+                        break;
+                    case 0:
+                        Console.WriteLine("Kết thúc chương trình.");
+                        break;
+                    default:
+                        Console.WriteLine("Lựa chọn không hợp lệ.");
+                        break;
+                }
+
+                Console.WriteLine("Nhấn Enter để tiếp tục...");
+                Console.ReadLine();
+            } while (choice != 0);
+        }
+
+        static void NhapTapHop(HashSet<int> set, string tenTap)
+        {
+            Console.WriteLine($"Nhập các phần tử của {tenTap} (nhập -1 để kết thúc):");
+            int n;
+            while ((n = int.Parse(Console.ReadLine())) != -1)
+            {
+                set.Add(n);
+            }
+        }
+
+        static void KiemTraPhanTu(HashSet<int> A)
+        {
+            Console.Write("Nhập phần tử cần kiểm tra: ");
+            int x = int.Parse(Console.ReadLine());
+            if (A.Contains(x))
+            {
+                Console.WriteLine($"{x} thuộc tập A.");
+            }
+            else
+            {
+                Console.WriteLine($"{x} không thuộc tập A.");
+            }
+        }
+
+        static void TinhGiao(HashSet<int> A, HashSet<int> B)
+        {
+            var giao = A.Intersect(B);
+            Console.WriteLine("Tập giao A ∩ B: " + string.Join(", ", giao));
+        }
+
+        static void TinhHop(HashSet<int> A, HashSet<int> B)
+        {
+            var hop = A.Union(B);
+            Console.WriteLine("Tập hợp A U B: " + string.Join(", ", hop));
+        }
+
+        static void TinhHieu(HashSet<int> A, HashSet<int> B)
+        {
+            var hieu = A.Except(B);
+            Console.WriteLine("Tập hiệu A \\ B: " + string.Join(", ", hieu));
+        }
+
+        static void TinhPhanBu(HashSet<int> U, HashSet<int> A)
+        {
+            var phanBu = U.Except(A);
+            Console.WriteLine("Phần bù của A trong U: " + string.Join(", ", phanBu));
+        }
+
+        static void TinhHieuDoiXung(HashSet<int> A, HashSet<int> B)
+        {
+            var hieuDoiXung = A.SymmetricExceptWith(B);
+            Console.WriteLine("Hiệu đối xứng A Δ B: " + string.Join(", ", hieuDoiXung));
+        }
+
+        static void XuatMenu()
+        {
+            Console.WriteLine("======== CHỌN CHỨC NĂNG ========");
+            Console.WriteLine("1. Nhập lại dữ liệu");
+            Console.WriteLine("2. Kiểm tra phần tử thuộc tập");
+            Console.WriteLine("3. Tính giao");
+            Console.WriteLine("4. Tính hợp");
+            Console.WriteLine("5. Tính hiệu");
+            Console.WriteLine("6. Tính phần bù");
+            Console.WriteLine("7. Tính hiệu đối xứng");
+            Console.WriteLine("0. Thoát");
+            Console.WriteLine("================================");
+        }
+    }
+}
